@@ -16,7 +16,8 @@ XII is a revolutionary drag-and-drop framework that leverages AI to generate pro
 
 ## 🎥 Demo
 
-[Watch Demo Video](https://youtu.be/your-demo-video)
+[Watch Demo Video(https://github.com/user-attachments/assets/86b21ed7-5854-4a29-b36d-7bead0ace527)
+
 
 ## ✨ Features
 
@@ -78,17 +79,17 @@ npm run dev
 
 ### Functionalty
 <div align="center">
-  <img src="./media/project-meadia-2" alt="Light Mode" width="800" />
+  <img src="./media/project-meadia-2.png" alt="Light Mode" width="800" />
 </div>
 
 
 <div align="center">
-  <img src="./media/project-meadia-3" alt="Light Mode" width="800" />
+  <img src="./media/project-media-3.png" alt="Light Mode" width="800" />
 </div>
 
 
 <div align="center">
-  <img src="./media/project-media-1" alt="Light Mode" width="800" />
+  <img src="./media/project-media-1.png" alt="Light Mode" width="800" />
 </div>
 
 
