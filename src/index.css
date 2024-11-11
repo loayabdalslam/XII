@@ -2,22 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
-.react-flow__node {
-  @apply select-none;
+:root {
+  --primary-color: theme('colors.indigo.600');
+  --secondary-color: theme('colors.purple.500');
 }
 
-.react-flow__handle {
-  @apply w-3 h-3 bg-gray-400;
+.dark {
+  color-scheme: dark;
 }
 
-.react-flow__handle:hover {
+.dark .react-flow__node {
+  @apply bg-gray-800 border-gray-700 text-white;
+}
+
+.dark .react-flow__handle {
   @apply bg-gray-600;
 }
 
-.react-flow__edge-path {
-  @apply stroke-2 stroke-gray-400;
+.dark .react-flow__handle:hover {
+  @apply bg-gray-400;
 }
 
-.react-flow__edge:hover .react-flow__edge-path {
-  @apply stroke-gray-600;
+.dark .react-flow__edge-path {
+  @apply stroke-gray-400;
+}
+
+.dark .react-flow__edge:hover .react-flow__edge-path {
+  @apply stroke-gray-200;
+}
+
+.dark .react-flow__controls button {
+  @apply bg-gray-800 border-gray-700 text-gray-300;
+}
+
+.dark .react-flow__controls button:hover {
+  @apply bg-gray-700;
+}
+
+.dark .react-flow__attribution {
+  @apply bg-gray-800 text-gray-300;
 }

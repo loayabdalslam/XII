@@ -11,17 +11,17 @@ import useStore from './store/useStore';
 import Sidebar from './components/Sidebar';
 import Toolbar from './components/Toolbar';
 import ModelNode from './components/nodes/ModelNode';
-import ViewNode from './components/nodes/ViewNode';
 import ControllerNode from './components/nodes/ControllerNode';
+import AppSettingsNode from './components/nodes/AppSettingsNode';
 
 const nodeTypes = {
   model: ModelNode,
-  view: ViewNode,
   controller: ControllerNode,
+  'app-settings': AppSettingsNode,
 };
 
 function Flow() {
-  const { nodes, edges, onNodesChange, onEdgesChange, onConnect, addNode } = useStore();
+  const { nodes, edges, onNodesChange, onEdgesChange, onConnect, addNode, appSettings } = useStore();
 
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
@@ -52,9 +52,9 @@ function Flow() {
   );
 
   return (
-    <div className="flex h-screen">
+    <div className={`flex h-screen ${appSettings.darkMode ? 'dark' : ''}`}>
       <Sidebar />
-      <div className="flex-1 h-full">
+      <div className="flex-1 h-full bg-white dark:bg-gray-900">
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -65,9 +65,10 @@ function Flow() {
           onDrop={onDrop}
           nodeTypes={nodeTypes}
           fitView
+          className="dark:bg-gray-900"
         >
-          <Background />
-          <Controls />
+          <Background className="dark:bg-gray-900" />
+          <Controls className="dark:bg-gray-800 dark:border-gray-700" />
           <Panel position="top-right">
             <Toolbar />
           </Panel>
