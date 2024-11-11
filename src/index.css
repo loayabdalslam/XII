@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.react-flow__node {
+  @apply select-none;
+}
+
+.react-flow__handle {
+  @apply w-3 h-3 bg-gray-400;
+}
+
+.react-flow__handle:hover {
+  @apply bg-gray-600;
+}
+
+.react-flow__edge-path {
+  @apply stroke-2 stroke-gray-400;
+}
+
+.react-flow__edge:hover .react-flow__edge-path {
+  @apply stroke-gray-600;
+}
