@@ -16,7 +16,7 @@ XII is a revolutionary drag-and-drop framework that leverages AI to generate pro
 
 ## 🎥 Demo
 
-[Watch Demo Video(https://github.com/user-attachments/assets/86b21ed7-5854-4a29-b36d-7bead0ace527)
+[Watch Demo Video](https://github.com/user-attachments/assets/86b21ed7-5854-4a29-b36d-7bead0ace527)
 
 
 ## ✨ Features
