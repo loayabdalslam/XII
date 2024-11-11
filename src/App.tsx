@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import ReactFlow, {
   Background,
   Controls,
@@ -10,6 +10,7 @@ import 'reactflow/dist/style.css';
 import useStore from './store/useStore';
 import Sidebar from './components/Sidebar';
 import Toolbar from './components/Toolbar';
+import LoadingSpinner from './components/LoadingSpinner';
 import ModelNode from './components/nodes/ModelNode';
 import ControllerNode from './components/nodes/ControllerNode';
 import AppSettingsNode from './components/nodes/AppSettingsNode';
@@ -24,6 +25,7 @@ const nodeTypes = {
 
 function Flow() {
   const { nodes, edges, onNodesChange, onEdgesChange, onConnect, addNode, appSettings } = useStore();
+  const [isLoading, setIsLoading] = useState(true);
 
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
@@ -52,6 +54,10 @@ function Flow() {
     },
     [addNode]
   );
+
+  if (isLoading) {
+    return <LoadingSpinner onComplete={() => setIsLoading(false)} />;
+  }
 
   return (
     <div className={`flex h-screen ${appSettings.darkMode ? 'dark' : ''}`}>
