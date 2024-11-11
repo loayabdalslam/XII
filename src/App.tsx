@@ -13,11 +13,13 @@ import Toolbar from './components/Toolbar';
 import ModelNode from './components/nodes/ModelNode';
 import ControllerNode from './components/nodes/ControllerNode';
 import AppSettingsNode from './components/nodes/AppSettingsNode';
+import RouterNode from './components/nodes/RouterNode';
 
 const nodeTypes = {
   model: ModelNode,
   controller: ControllerNode,
   'app-settings': AppSettingsNode,
+  router: RouterNode,
 };
 
 function Flow() {

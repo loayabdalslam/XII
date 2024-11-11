@@ -3,6 +3,19 @@ import { persist } from 'zustand/middleware';
 import { Node, Edge, Connection, addEdge, applyNodeChanges, applyEdgeChanges } from 'reactflow';
 import { ComponentType } from '../types';
 
+interface TechStack {
+  id: string;
+  name: string;
+  files: {
+    path: string;
+    content: string;
+  }[];
+  dependencies: {
+    dependencies: Record<string, string>;
+    devDependencies: Record<string, string>;
+  };
+}
+
 interface AppSettings {
   name: string;
   title: string;
@@ -13,6 +26,7 @@ interface AppSettings {
     secondary: string;
   };
   darkMode: boolean;
+  techStack?: TechStack;
 }
 
 interface FlowState {
@@ -105,19 +119,27 @@ const useStore = create<FlowState>()(
       },
 
       updateComponent: (id: string, data: Partial<ComponentType>) => {
-        set({
-          nodes: get().nodes.map((node) =>
-            node.id === id
-              ? {
-                  ...node,
-                  data: {
-                    ...node.data,
-                    component: { ...node.data.component, ...data },
+        set(state => ({
+          nodes: state.nodes.map(node => {
+            if (node.id === id) {
+              return {
+                ...node,
+                data: {
+                  ...node.data,
+                  label: data.name || node.data.label,
+                  component: {
+                    ...node.data.component,
+                    ...data,
                   },
-                }
-              : node
+                },
+              };
+            }
+            return node;
+          }),
+          components: state.components.map(comp =>
+            comp.id === id ? { ...comp, ...data } : comp
           ),
-        });
+        }));
       },
 
       updateAppSettings: (settings: Partial<AppSettings>) => {
@@ -187,14 +209,20 @@ const useStore = create<FlowState>()(
       generateFiles: () => {
         const { nodes, appSettings, getRoutes } = get();
         const files: Record<string, string> = {};
-        const routes = getRoutes();
+
+        // Add tech stack files if selected
+        if (appSettings.techStack) {
+          appSettings.techStack.files.forEach(file => {
+            files[file.path] = file.content;
+          });
+        }
 
         // Generate model files
         nodes
           .filter(node => node.type === 'model')
           .forEach(node => {
             const { component } = node.data;
-            files[`models/${component.name}.ts`] = component.code;
+            files[`src/models/${component.name}.ts`] = component.code;
           });
 
         // Generate controller files with integrated views
@@ -202,52 +230,13 @@ const useStore = create<FlowState>()(
           .filter(node => node.type === 'controller')
           .forEach(node => {
             const { component } = node.data;
-            files[`components/${component.name}/${component.name}.tsx`] = component.code;
+            files[`src/components/${component.name}/${component.name}.tsx`] = component.code;
           });
 
-        // Generate router
-        if (routes.length > 0) {
-          const routerContent = `
-import React from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-${routes.map(route => `import { ${route.component} } from '../components/${route.component}/${route.component}';`).join('\n')}
-
-const AppRouter: React.FC = () => {
-  return (
-    <BrowserRouter>
-      <nav className="bg-${appSettings.theme.primary} text-white p-4">
-        <div className="container mx-auto flex items-center space-x-4">
-          <Link to="/" className="text-xl font-bold">${appSettings.title}</Link>
-          <div className="flex space-x-4">
-            ${routes.map(route => `
-              <Link 
-                to="${route.path}"
-                className="hover:text-${appSettings.theme.secondary} transition-colors"
-              >
-                ${route.component.replace(/([A-Z])/g, ' $1').trim()}
-              </Link>
-            `).join('')}
-          </div>
-        </div>
-      </nav>
-
-      <main className="container mx-auto p-4">
-        <Routes>
-          ${routes.map(route => `
-            <Route 
-              path="${route.path}" 
-              element={<${route.component} />} 
-            />
-          `).join('')}
-        </Routes>
-      </main>
-    </BrowserRouter>
-  );
-};
-
-export default AppRouter;`;
-
-          files['router/AppRouter.tsx'] = routerContent;
+        // Generate router if it exists
+        const routerNode = nodes.find(node => node.type === 'router');
+        if (routerNode) {
+          files['src/router/index.tsx'] = routerNode.data.component.code;
         }
 
         set({ generatedFiles: files });
